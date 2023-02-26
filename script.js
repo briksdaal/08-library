@@ -45,22 +45,27 @@ function populateLibrary() {
     const current = myLibrary[i];
     const bookCard = document.createElement('div');
     const title = document.createElement('h2');
+    const by = document.createElement('span');
     const author = document.createElement('h3');
     const pages = document.createElement('p');
     const readBtn = document.createElement('button');
     const removeBtn = document.createElement('button');
 
     title.textContent = current.title;
+    by.textContent = 'by ';
     author.textContent = current.author;
-    pages.textContent = current.pages;
+    pages.textContent = `${current.pages} pages`;
     readBtn.textContent = current.read ? 'Read' : 'Unread';
     removeBtn.textContent = '×';
 
     bookCard.classList.add('book-card');
     bookCard.dataset.index = i;
+    const rowDiv = document.createElement('div');
     bookCard.appendChild(title);
     bookCard.appendChild(removeBtn).classList.add('remove-book');
-    bookCard.appendChild(author);
+    rowDiv.appendChild(by);
+    rowDiv.appendChild(author);
+    bookCard.appendChild(rowDiv);
     bookCard.appendChild(pages);
     bookCard.appendChild(readBtn).classList.add('read-btn');
     readBtn.addEventListener('click', (e) => toggleReadStatus(e.target));
