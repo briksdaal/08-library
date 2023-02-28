@@ -1,24 +1,49 @@
-class Book {
-  constructor(title, author, pages, read) {
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.read = read;
+class Library {
+  myLibrary = [];
+
+  get libraryArray() {
+    return this.myLibrary;
   }
 
-  toggleRead() {
-    this.read = !this.read;
+  addBookToLibrary(book) {
+    this.myLibrary.push(book);
   }
 
-  info() {
-    return `${this.title} by ${this.author}, ${this.pages} pages, ${this.read ? 'read' : 'not yet read'}`;
+  removeBookFromLibrary(index) {
+    this.myLibrary.splice(index, 1);
+  }
+
+  static createBook(title, author, pages, read) {
+    let isRead = read;
+
+    const toggleRead = () => {
+      isRead = !isRead;
+    };
+    const getRead = () => isRead;
+
+    return {
+      title,
+      author,
+      pages,
+      getRead,
+      toggleRead,
+    };
   }
 }
+
+const ScreenController = (() => {
+  const lib = new Library();
+  const book1 = Library.createBook('The Hobbit', 'J.R.R. Tolkien', 295, false);
+  lib.addBookToLibrary(book1);
+  console.log(lib.libraryArray);
+})();
 
 const myLibrary = [];
 const modal = document.querySelector('.modal');
 const booksContainer = document.querySelector('.books-container');
 const addNewBookButton = document.querySelector('.new-book-btn');
+
+populateLibrary();
 
 function addBookToLibrary(book) {
   myLibrary.push(book);
@@ -86,21 +111,17 @@ function hideFormModal() {
   modal.querySelector('form').reset();
 }
 
-const book1 = new Book('The Hobbit', 'J.R.R. Tolkien', 295, false);
-const book2 = new Book('To Kill a Mockingbird', 'Harper Lee', 281, true);
-const book3 = new Book('Pride and Prejudice', 'Jane Austen', 435, false);
-const book4 = new Book('The Great Gatsby', 'F. Scott Fitzgerald', 180, true);
-const book5 = new Book('Wuthering Heights', 'Emily Bronte', 357, true);
-const book6 = new Book('1984', 'George Orwell', 328, false);
+// const book2 = new Book('To Kill a Mockingbird', 'Harper Lee', 281, true);
+// const book3 = new Book('Pride and Prejudice', 'Jane Austen', 435, false);
+// const book4 = new Book('The Great Gatsby', 'F. Scott Fitzgerald', 180, true);
+// const book5 = new Book('Wuthering Heights', 'Emily Bronte', 357, true);
+// const book6 = new Book('1984', 'George Orwell', 328, false);
 
-addBookToLibrary(book1);
-addBookToLibrary(book2);
-addBookToLibrary(book3);
-addBookToLibrary(book4);
-addBookToLibrary(book5);
-addBookToLibrary(book6);
-
-populateLibrary();
+// addBookToLibrary(book2);
+// addBookToLibrary(book3);
+// addBookToLibrary(book4);
+// addBookToLibrary(book5);
+// addBookToLibrary(book6);
 
 addNewBookButton.addEventListener('click', () => showFormModal());
 
