@@ -170,7 +170,6 @@ const ScreenController = (() => {
       titleCheck();
       authorCheck();
       pagesCheck();
-      form.reportValidity();
     } else {
       const newBook = Library.createBook(
         form.title.value,
