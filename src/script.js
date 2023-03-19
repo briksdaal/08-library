@@ -39,6 +39,7 @@ const ScreenController = (() => {
   const booksContainer = document.querySelector('.books-container');
   const modal = document.querySelector('.modal');
   const addNewBookButton = document.querySelector('.new-book-btn');
+  const newBookForm = document.querySelector('#new-book-form');
 
   const lib = new Library();
   const book1 = Library.createBook('The Hobbit', 'J.R.R. Tolkien', 295, false);
@@ -127,27 +128,70 @@ const ScreenController = (() => {
       return;
     }
 
-    if (e.target.getAttribute('type') === 'submit') {
-      e.preventDefault();
+    if (e.target.getAttribute('type') === 'reset') {
+      hideFormModal();
+    }
+  }
+
+  function titleCheck() {
+    const { title } = newBookForm;
+    if (title.validity.valueMissing) {
+      title.setCustomValidity('Surely there\'s a title');
+    } else {
+      title.setCustomValidity('');
+    }
+  }
+
+  function authorCheck() {
+    const { author } = newBookForm;
+    if (author.validity.valueMissing) {
+      author.setCustomValidity('Written by no one? Odd...');
+    } else {
+      author.setCustomValidity('');
+    }
+  }
+
+  function pagesCheck() {
+    const { pages } = newBookForm;
+    if (pages.validity.valueMissing) {
+      pages.setCustomValidity('Empty! Unheard of');
+    } else if (pages.validity.rangeUnderflow) {
+      pages.setCustomValidity('Sounds too short');
+    } else {
+      pages.setCustomValidity('');
+    }
+  }
+
+  function onSubmit(e) {
+    e.preventDefault();
+    const form = e.target;
+
+    if (!form.checkValidity()) {
+      titleCheck();
+      authorCheck();
+      pagesCheck();
+      form.reportValidity();
+    } else {
       const newBook = Library.createBook(
-        e.target.form.title.value,
-        e.target.form.author.value,
-        e.target.form.pages.value,
-        e.target.form.read.checked,
+        form.title.value,
+        form.author.value,
+        form.pages.value,
+        form.read.checked,
       );
       lib.addBookToLibrary(newBook);
       populateScreen();
-      hideFormModal();
-    }
-
-    if (e.target.getAttribute('type') === 'reset') {
       hideFormModal();
     }
   }
 
   booksContainer.addEventListener('click', ClickHandlerBooks);
   modal.addEventListener('click', ClickHandlerModal);
-  addNewBookButton.addEventListener('click', () => showFormModal());
+  addNewBookButton.addEventListener('click', showFormModal);
+  newBookForm.addEventListener('submit', onSubmit);
+
+  newBookForm.title.addEventListener('input', titleCheck);
+  newBookForm.author.addEventListener('input', authorCheck);
+  newBookForm.pages.addEventListener('input', pagesCheck);
 
   populateScreen();
 })();
