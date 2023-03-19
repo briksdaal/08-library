@@ -194,4 +194,7 @@ const ScreenController = (() => {
   newBookForm.pages.addEventListener('input', pagesCheck);
 
   populateScreen();
+  titleCheck();
+  authorCheck();
+  pagesCheck();
 })();
